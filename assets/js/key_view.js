@@ -1,6 +1,5 @@
 (function() {
 
-  var NAMESPACE = 'http://www.w3.org/2000/svg';
   var WIDTH = 371;
   var KEY_HEIGHT = 20;
   var KEY_SPACING = 3;
@@ -13,10 +12,12 @@
 
   function KeyView() {
     var height = KEY_HEIGHT*5 + KEY_SPACING*6
-    this._element = document.createElementNS(NAMESPACE, 'svg');
-    setAttributes(this._element, {
+    this._element = window.svgUtil.createElement('svg');
+    window.svgUtil.setAttributes(this._element, {
       viewBox: '0 0 ' + WIDTH + ' ' + height
     });
+
+    this._keyElems = {};
 
     var rowCodes = [
       [192, 49, 50, 51, 52, 53, 54, 55, 56, 57, 48, 219, 221, 8],
@@ -45,6 +46,14 @@
     return this._element;
   };
 
+  KeyView.prototype.keyElement = function(code) {
+    var prop = code + '';
+    if (this._keyElems.hasOwnProperty(prop)) {
+      return this._keyElems[prop];
+    }
+    return null;
+  };
+
   KeyView.prototype._createRow = function(rowIdx, codes, widths) {
     var x = KEY_SPACING;
     var y = rowIdx*KEY_HEIGHT + (rowIdx+1)*KEY_SPACING;
@@ -55,26 +64,19 @@
   };
 
   KeyView.prototype._createKey = function(code, x, y, width) {
-    var key = document.createElementNS(NAMESPACE, 'rect');
-    setAttributes(key, {
+    var key = window.svgUtil.createElement('rect');
+    window.svgUtil.setAttributes(key, {
       x: x,
       y: y,
       width: width,
       height: KEY_HEIGHT,
-      class: 'key-view-key key-view-key-' + code,
 
       rx: 2.5,
       ry: 2.5,
     });
     this._element.appendChild(key);
+    this._keyElems[code] = key;
   };
-
-  function setAttributes(elem, attrs) {
-    var keys = Object.keys(attrs);
-    for (var i = 0, len = keys.length; i < len; ++i) {
-      elem.setAttribute(keys[i], attrs[keys[i]]);
-    }
-  }
 
   function repeatedArray(count, elem) {
     var res = [];

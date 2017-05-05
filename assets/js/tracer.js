@@ -10,8 +10,8 @@
   }
 
   Tracer.prototype.keydown = function(e) {
-    this._keyView.setPressed(e.which, true);
-    var key = this._keyView.keyElement(e.which);
+    this._keyView.setPressed(codeFromEvent(e), true);
+    var key = this._keyView.keyElement(codeFromEvent(e));
     if (key !== null && this._lastKey !== null &&
         key !== this._lastKey) {
       this._addSegment(this._lastKey, key);
@@ -20,7 +20,7 @@
   };
 
   Tracer.prototype.keyup = function(e) {
-    this._keyView.setPressed(e.which, false);
+    this._keyView.setPressed(codeFromEvent(e), false);
   };
 
   Tracer.prototype._addSegment = function(start, end) {
@@ -95,6 +95,14 @@
 
   function millis() {
     return new Date().getTime();
+  }
+
+  function codeFromEvent(e) {
+    if (e.location === KeyboardEvent.DOM_KEY_LOCATION_RIGHT) {
+      return -e.which;
+    } else {
+      return e.which;
+    }
   }
 
   window.Tracer = Tracer;

@@ -10,12 +10,17 @@
   }
 
   Tracer.prototype.keydown = function(e) {
+    this._keyView.setPressed(e.which, true);
     var key = this._keyView.keyElement(e.which);
     if (key !== null && this._lastKey !== null &&
         key !== this._lastKey) {
       this._addSegment(this._lastKey, key);
     }
     this._lastKey = key;
+  };
+
+  Tracer.prototype.keyup = function(e) {
+    this._keyView.setPressed(e.which, false);
   };
 
   Tracer.prototype._addSegment = function(start, end) {

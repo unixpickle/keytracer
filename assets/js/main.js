@@ -6,6 +6,7 @@
 
     var tracer = new window.Tracer(kv);
     window.addEventListener('keydown', tracer.keydown.bind(tracer));
+    window.addEventListener('keyup', tracer.keyup.bind(tracer));
   }
 
   window.addEventListener('load', init);

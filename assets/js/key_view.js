@@ -54,6 +54,19 @@
     return null;
   };
 
+  KeyView.prototype.setPressed = function(code, pressed) {
+    var prop = code + '';
+    if (this._keyElems.hasOwnProperty(prop)) {
+      var e = this._keyElems[prop];
+      if (pressed) {
+        window.svgUtil.setAttributes(e, {fill: '#555'});
+      } else {
+        window.svgUtil.setAttributes(e, {fill: '#000'});
+      }
+      return this._keyElems[prop];
+    }
+  };
+
   KeyView.prototype._createRow = function(rowIdx, codes, widths) {
     var x = KEY_SPACING;
     var y = rowIdx*KEY_HEIGHT + (rowIdx+1)*KEY_SPACING;

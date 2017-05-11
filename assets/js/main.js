@@ -1,6 +1,9 @@
 (function() {
 
   function init() {
+    var layoutSelect = window.keyLayout.makeSelect();
+    document.body.appendChild(layoutSelect);
+    
     var kv = new window.KeyView();
     document.body.appendChild(kv.element());
 

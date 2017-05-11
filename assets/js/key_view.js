@@ -18,6 +18,7 @@
     });
 
     this._keyElems = {};
+    this._labelElems = {};
 
     var rowCodes = [
       [192, 49, 50, 51, 52, 53, 54, 55, 56, 57, 48, 219, 221, 8],
@@ -40,6 +41,9 @@
 
     this._createKey(SPACE_CODE, SHIFT_KEY_WIDTH+LETTER_KEY_WIDTH*2+KEY_SPACING*4,
       KEY_HEIGHT*4+KEY_SPACING*5, LETTER_KEY_WIDTH*5+KEY_SPACING*4);
+
+    this._updateLayout();
+    window.keyLayout.addListener(this._updateLayout.bind(this));
   }
 
   KeyView.prototype.element = function() {
@@ -89,6 +93,30 @@
     });
     this._element.appendChild(key);
     this._keyElems[code] = key;
+
+    var label = window.svgUtil.createElement('text');
+    window.svgUtil.setAttributes(label, {
+      x: x+width/2,
+      y: y+KEY_HEIGHT/2,
+      stroke: 'none',
+      fill: 'white',
+      'font-family': 'sans-serif',
+      'font-size': '8px',
+      'text-anchor': 'middle',
+      'alignment-baseline': 'middle'
+    });
+    this._element.appendChild(label);
+    this._labelElems[code] = label;
+  };
+
+  KeyView.prototype._updateLayout = function() {
+    var mapping = window.keyLayout.map();
+    console.log(mapping);
+    var codes = Object.keys(mapping);
+    for (var i = 0, len = codes.length; i < len; ++i) {
+      var code = codes[i];
+      this._labelElems[code].textContent = mapping[code];
+    }
   };
 
   function repeatedArray(count, elem) {
